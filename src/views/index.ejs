@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        
+        <h1><%= title %></h1>
+        <form action="/add" method="POST">
+            <legend>
+                Agregar una Tarea
+            </legend>
+            <div class="form-group">
+                <input placeholder="Agregar titulo" type="text" id="title" class="form-control" name="title">
+            </div>
+            <div class="form-group">
+                <textarea placeholder="Agregar una descripcion" class="form-control" name="description" id="" cols="50" rows="1"></textarea>
+            </div>
+            <button class="btn btn-primary" type="button" onclick="ajaxAgregar()">
+                Agregar
+            </button>
+        </form>
+            <hr>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>N</th>
+                        <th>Titulos</th>
+                        <th>Descripcion</th>
+                        <th>Operaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (var i=0; i < tasks.length; i++){ %>
+                        <tr>
+                            <td><%= i+1 %></td>
+                            <td>
+                                <strong>
+                                    <%=  tasks[i].title %>
+                                </strong>
+                            </td>
+                            <td>
+                                <%= tasks[i].description %>
+                            </td>
+                            <td>
+                                <!-- Si la tarea no esta hecha se coloca en negro, caso contrario en verde -->
+                                <button type="button" class="<%= tasks[i].status ? 'btn btn-success' : 'btn btn-dark' %>" onclick="ajaxAct('<%= tasks[i]._id %>')" id="update">Listo</button>
+                                <button type="button" id="delete" class="btn btn-danger" href="/delete/<%= tasks[i]._id %>">Eliminar</button>
+                            </td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+            
+    </div>
+    <script>
+        document.getElementById('title').focus();
+        document.getElementById('delete').addEventListener('click', function (e){
+            let respuesta = confirm('Estas seguro de eliminar la tarea?');
+            if(!respuesta){
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
+
+<script
+src="https://code.jquery.com/jquery-3.4.1.min.js"
+integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+crossorigin="anonymous"></script>
+<script>
+function ajaxAgregar(){
+      console.log('Aqui desde el html');
+      $.post('/add', {}, function(data){
+        console.log(data);
+      })
+    }
+function ajaxAct(id){
+      console.log('Aqui desde el html');
+      console.log(id);
+      $.post('http://localhost:3000/turn/:id', {id}, function(data){
+        console.log(data);
+        
+      })
+    }
+
+</script>
