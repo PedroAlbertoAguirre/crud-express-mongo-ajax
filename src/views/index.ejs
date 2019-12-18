@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
@@ -32,38 +33,41 @@ crossorigin="anonymous">
             </button>
         </form>
             <hr>
-            <table id="miTabla" class="table table-bordered table-hover" >
-                <thead>
-                    <tr>
-                        <th>N</th>
-                        <th>Titulos</th>
-                        <th>Descripcion</th>
-                        <th>Operaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (var i=0; i < tasks.length; i++){ %>
+            <div class="table-responsive">
+
+                <table id="miTabla" class="table table-bordered table-hover" >
+                    <thead>
                         <tr>
-                            <td><%= i+1 %></td>
-                            <td>
-                                <strong>
-                                    <%=  tasks[i].title %>
-                                </strong>
-                            </td>
-                            <td>
-                                <%= tasks[i].description %>
-                            </td>
-                            <td>
-                                <!-- Si la tarea no esta hecha se coloca en negro, caso contrario en verde -->
-                                <button class="<%= tasks[i].status ? 'btn btn-success' : 'btn btn-dark' %>" onclick="ajaxAct('<%= tasks[i]._id %>')" id="update_<%= tasks[i]._id %>">Listo</button>
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#editar" onclick="ajaxEdit('<%= tasks[i]._id %>')">Editar</button>
-                                <!--  -->
-                                <a id="delete" class="btn btn-danger" href="/delete/<%= tasks[i]._id %>">Eliminar</a>
-                            </td>
+                            <th>N</th>
+                            <th>Titulos</th>
+                            <th>Descripcion</th>
+                            <th>Operaciones</th>
                         </tr>
-                    <%}%>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <% for (var i=0; i < tasks.length; i++){ %>
+                            <tr>
+                                <td><%= i+1 %></td>
+                                <td>
+                                    <strong>
+                                        <%=  tasks[i].title %>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <%= tasks[i].description %>
+                                </td>
+                                <td>
+                                    <!-- Si la tarea no esta hecha se coloca en negro, caso contrario en verde -->
+                                    <button class="<%= tasks[i].status ? 'btn btn-success' : 'btn btn-dark' %>" onclick="ajaxAct('<%= tasks[i]._id %>')" id="update_<%= tasks[i]._id %>">Listo</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#editar" onclick="ajaxEdit('<%= tasks[i]._id %>')">Editar</button>
+                                    <!--  -->
+                                    <a id="delete" class="btn btn-danger" href="/delete/<%= tasks[i]._id %>">Eliminar</a>
+                                </td>
+                            </tr>
+                        <%}%>
+                    </tbody>
+                </table>
+            </div>
             
     </div>
 
@@ -112,9 +116,9 @@ crossorigin="anonymous">
                 <form>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Tarea:</label>
-                        <input type="text" class="form-control" name="" id="name-tarea">
+                        <input type="text" class="form-control" name="tarea" id="name-tarea">
                         <label for="message-text" class="col-form-label">Descripcion:</label>
-                        <textarea type="text" class="form-control" name="" id="descripcion"></textarea>
+                        <textarea type="text" class="form-control" name="descripcion" id="descripcion"></textarea>
                     </div>
                      <div class="form-group">
                        
