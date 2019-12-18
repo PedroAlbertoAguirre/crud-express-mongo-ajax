@@ -3,10 +3,13 @@ const router = express.Router();
 var taskControllers = require('../controllers/task-controllers');
 //const model = require('../models/task')();
 
+console.log('aqui llega')
 router.get('/',  taskControllers.list);
 router.post('/add', taskControllers.add);
 router.post('/turn/:id', taskControllers.turn);
 router.get('/delete/:id', taskControllers.delete);
+router.post('/edit/:id', taskControllers.edit);
+router.put('/update/:id', taskControllers.update);
 
 /*
 router.post('/add', (req,res) => {

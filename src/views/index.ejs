@@ -3,6 +3,15 @@
     <meta charset="UTF-8">
     <title><%= title %></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+    
+    <script
+src="https://code.jquery.com/jquery-3.4.1.min.js"
+integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+crossorigin="anonymous"> 
+</script>
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -18,12 +27,12 @@
             <div class="form-group">
                 <textarea placeholder="Agregar una descripcion" class="form-control" name="description" id="" cols="50" rows="1"></textarea>
             </div>
-            <button class="btn btn-primary" type="button" onclick="ajaxAgregar()">
+            <button class="btn btn-primary">
                 Agregar
             </button>
         </form>
             <hr>
-            <table class="table table-bordered table-hover">
+            <table id="miTabla" class="table table-bordered table-hover" >
                 <thead>
                     <tr>
                         <th>N</th>
@@ -46,8 +55,10 @@
                             </td>
                             <td>
                                 <!-- Si la tarea no esta hecha se coloca en negro, caso contrario en verde -->
-                                <button type="button" class="<%= tasks[i].status ? 'btn btn-success' : 'btn btn-dark' %>" onclick="ajaxAct('<%= tasks[i]._id %>')" id="update">Listo</button>
-                                <button type="button" id="delete" class="btn btn-danger" href="/delete/<%= tasks[i]._id %>">Eliminar</button>
+                                <button class="<%= tasks[i].status ? 'btn btn-success' : 'btn btn-dark' %>" onclick="ajaxAct('<%= tasks[i]._id %>')" id="update_<%= tasks[i]._id %>">Listo</button>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#editar" onclick="ajaxEdit('<%= tasks[i]._id %>')">Editar</button>
+                                <!--  -->
+                                <a id="delete" class="btn btn-danger" href="/delete/<%= tasks[i]._id %>">Eliminar</a>
                             </td>
                         </tr>
                     <%}%>
@@ -55,6 +66,70 @@
             </table>
             
     </div>
+
+
+    <!-- Para mostrar contenido con modals -->
+    <!-- <div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Contacto con el hotel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Tu Email:</label>
+                            <input type="text" class="form-control" name="" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Mensaje:</label>
+                            <textarea type="text" class="form-control" name="" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="enviarBtn">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar tarea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Tarea:</label>
+                        <input type="text" class="form-control" name="" id="name-tarea">
+                        <label for="message-text" class="col-form-label">Descripcion:</label>
+                        <textarea type="text" class="form-control" name="" id="descripcion"></textarea>
+                    </div>
+                     <div class="form-group">
+                       
+                    </div> 
+                     
+                </form>
+            </div>
+            <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="actualizar">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script>
         document.getElementById('title').focus();
         document.getElementById('delete').addEventListener('click', function (e){
@@ -63,28 +138,107 @@
                 e.preventDefault();
             }
         });
+
     </script>
 </body>
 </html>
 
-<script
-src="https://code.jquery.com/jquery-3.4.1.min.js"
-integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-crossorigin="anonymous"></script>
+
+
+
+<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
 <script>
+  $(document).ready( function () {
+    $('#miTabla').DataTable();
+} );
+
+
+    /*
 function ajaxAgregar(){
       console.log('Aqui desde el html');
       $.post('/add', {}, function(data){
         console.log(data);
       })
     }
-function ajaxAct(id){
-      console.log('Aqui desde el html');
-      console.log(id);
-      $.post('http://localhost:3000/turn/:id', {id}, function(data){
-        console.log(data);
-        
-      })
+    */
+
+
+
+    
+function ajaxEdit(id){
+   
+    $('#editar').on('show.bs.modal', function(e){ 
+    
+        $.post('/edit/:id', {id}, function( data ) {
+            console.log(data);
+            $("#name-tarea").val(data.title);
+            $("#descripcion").val(data.description);
+           // $("#descripcion").val(data.desription);
+
+            });
+
+            $('#actualizar').click(function(){
+                let name = $("#name-tarea").val();
+                let descr = $("#descripcion").val();
+                $.ajax({ url: '/update', method: 'PUT', data:likes})
+                 .then(function() {
+                    
+                });
+            });
+            
+    });
+}
+
+
+    //se ejecuta cuando se realiza el evento show.bs.modal,
+               
+    // show  :se muestra
+                // shown :se mostro
+                // hide  :se oculta
+                // hidden:se ocultó
+                //console.log('El modal se esta mostrando'); 
+
+                //remover la clase al boton
+                //$('#contactoBtn').removeClass('btn-outline-success');
+                //$('#contactoBtn').addClass('btn-primary');
+                //$('#contactoBtn').prop('disabled',true); // prop accede a las propiedades
+                //$('#enviarBtn').prop('disabled',true); // prop accede a las propiedades
+                
+           
+
+
+    function ajaxAct(id) {
+        console.log('Aqui desde el html');
+        console.log('El numero de id es: ', id);
+        $.post('/turn/:id', { id }, function (data) {
+            console.log(data);
+            var cb = document.getElementById('update_'+id).className;
+            console.log(cb);
+            if (data) {
+                console.log('entra al if del true')
+                console.log(document.getElementById('update_'+id).className);
+                $('#update_'+id).removeClass(cb);
+                console.log('despues del remove del true');
+                console.log(document.getElementById('update_'+id).className);
+                $('#update_'+id).addClass('btn btn-success');
+                console.log('despues del add del true');
+                console.log(document.getElementById('update_'+id).className)
+            } else {
+                console.log('entra al if del false')
+                $('#update_'+id).removeClass(cb);
+                console.log('despues del remove del false')
+                console.log(document.getElementById('update_'+id).className)
+                console.log('despues del add del false')
+                $('#update_'+id).addClass('btn btn-dark');
+                console.log(document.getElementById('update_'+id).className)
+            }
+        })
     }
 
+
+  
 </script>

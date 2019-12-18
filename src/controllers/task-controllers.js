@@ -5,6 +5,7 @@ var taskControllers = {};
 // ------------- Listar tareas ------------
 taskControllers.list = function (req,res) {
     model.find({}, (err,tasks) => {
+        console.log('aqui llega2')
         if(err) throw err;
         res.render('index', {
             title: 'CRUD',
@@ -20,20 +21,20 @@ taskControllers.add = function (req,res) {
 
     model.create(body, (err, task) => {
         if(err) throw err;
-        //res.redirect('/');
-        return res.send(task);
+        res.redirect('/');
+        
     })
 }
 
 // ------------- Cambiar tarea ------------
 taskControllers.turn = function (req,res){
-    let id=req.params.id;
+    let id=req.body.id;
     model.findById(id, (err, task) => {
         if(err) throw err;
         task.status = !task.status;
         task.save()
-            //.then(() => res.redirect('/'))
-            return res.send(task.status);
+            .then(() => res.send(task.status))
+            //return res.send(task.status);
     });
 }
 
@@ -43,8 +44,25 @@ taskControllers.delete = function (req,res){
     model.remove({_id: id}, (err,task) => {
         if(err) throw err;
         res.redirect('/')
-
+        
     });
 }
+
+// ------------- Editar Tarea ------------
+taskControllers.edit = function (req,res){
+    let id=req.body.id;
+    console.log(id);
+    model.findById(id, (err, task) => {
+        if(err) throw err;
+        res.send(task)
+            //return res.send(task.status);
+    });
+}
+
+// ------------- Editar Tarea ------------
+taskControllers.update = function (req, res){
+    
+}
+
 
 module.exports = taskControllers;
